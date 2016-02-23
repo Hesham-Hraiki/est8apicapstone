@@ -1,0 +1,15 @@
+{
+  "name": "est8api",
+  "version": "1.0.0",
+  "description": "NodeJs with express for the est8 mobile application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ifeanyi Okadigb",
+  "license": "ISC",
+  "dependencies": {
+    "mongojs": "^2.3.0",
+    "mongoose": "^4.4.4"
+  }
+}
