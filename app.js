@@ -24,5 +24,5 @@ app.get('/api', function(req,res){
 	});
 });
 
-app.listen();
-console.log("App running on port 3000");
+app.listen(8080);
+console.log("App running on port 8080");
