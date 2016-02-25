@@ -4,8 +4,10 @@
   "description": "NodeJs with express for the est8 mobile application",
   "main": "app.js",
   "scripts": {
+    "start": "start app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "main": "app.js",
   "author": "Ifeanyi Okadigb",
   "license": "ISC",
   "dependencies": {
