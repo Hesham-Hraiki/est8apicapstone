@@ -23,6 +23,19 @@ app.get('/api', function(req,res){
 		res.json(docs);
 	});
 });
+//url for profile details
+app.get('/api/:profileID',function(req,res){
+	console.log("Show me JSON DATA OF " + req.params.profileID);
+	db.collection('listings').find({_id:req.params.profileID}).toArray(function(err,docs){
+		if(err)
+		{
+			res.send(err);
+		}
+	//	console.log(docs);
+		res.json(docs);
+	});
+});
+
 // test for openshift compatibility
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
@@ -31,4 +44,5 @@ app.listen(server_port, server_ip_address, function () {
   console.log( "Listening on " + server_ip_address + ", server_port " + server_port )
 });
 
+//app.listen('3000');
 
