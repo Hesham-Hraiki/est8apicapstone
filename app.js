@@ -2,7 +2,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var app = express();
 var mongojs = require('mongojs');
-mongoose.connect('mongodb://159.203.29.179/meteor');
+mongoose.connect('mongodb://159.203.17.174/meteor');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -23,8 +23,9 @@ app.get('/api', function(req,res){
 		res.json(docs);
 	});
 });
+
 //url for profile details
-app.get('/api/:profileID',function(req,res){
+app.get('/api/?:profileID',function(req,res){
 	console.log("Show me JSON DATA OF " + req.params.profileID);
 	db.collection('listings').find({_id:req.params.profileID}).toArray(function(err,docs){
 		if(err)
