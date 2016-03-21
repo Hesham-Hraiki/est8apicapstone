@@ -1,6 +1,10 @@
 var express = require('express');
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+//app.use(express.bodyParser());
 var mongojs = require('mongojs');
 mongoose.connect('mongodb://159.203.17.174/meteor');
 var db = mongoose.connection;
@@ -39,6 +43,7 @@ app.get('/api/?:profileID',function(req,res){
 //filter options
 app.post('/filter', function(req,res){
 	var options = req.body;
+	console.log(options);
 	res.send(options);
 });
 
