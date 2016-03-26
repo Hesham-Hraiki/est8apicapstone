@@ -42,9 +42,29 @@ app.get('/api/?:profileID',function(req,res){
 });
 //filter options
 app.post('/filter', function(req,res){
-	var options = req.body;
-	console.log(options);
-	res.send(options);
+	var location = req.body.location;
+	var bedroom = req.body.noOfBeds;
+	var bathroom = req.body.noOfBaths;
+	var minPrice = parseInt(req.body.minPrice);
+	var maxPrice = parseInt(req.body.maxPrice);
+	var category = req.body.type;
+	db.collection('listings').find({
+		$or:[{city:location},{province:location},{postal:location}],
+		bedrooms: bedroom,
+		bathrooms: bathroom,
+		category: category,
+		price: {$gte: minPrice,$lte: maxPrice}
+		
+	}).toArray(function(err,docs){
+		if(err){
+			console.log(err);
+			res.send(err);
+		}
+		console.log(docs);
+		res.json(docs);
+	})
+	//console.log(options);
+	//res.send(options);
 });
 
 // test for openshift compatibility
