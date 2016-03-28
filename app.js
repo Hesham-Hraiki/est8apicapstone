@@ -2,8 +2,8 @@ var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var app = express();
-app.use(bodyParser.json({ type: 'application/*+json' }));
-//app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 //app.use(express.bodyParser());
 var mongojs = require('mongojs');
 mongoose.connect('mongodb://159.203.17.174/meteor');
@@ -42,6 +42,7 @@ app.get('/api/?:profileID',function(req,res){
 });
 //filter options
 app.post('/filter', function(req,res){
+	console.log(req.body);
 	var location = req.body.location;
 	var bedroom = req.body.noOfBeds;
 	var bathroom = req.body.noOfBaths;
@@ -68,7 +69,7 @@ app.post('/filter', function(req,res){
 });
 
 // test for openshift compatibility
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
+var server_port = process.env.OPENSHIFT_NODEJS_PORT || 3000
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 
 app.listen(server_port, server_ip_address, function () {
