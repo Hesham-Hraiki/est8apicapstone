@@ -1,10 +1,18 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var nodemailer = require('nodemailer');
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 //app.use(express.bodyParser());
+var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'est8app@gmail.com', // Your email id
+            pass: 'mobileest8app' // Your password
+        }
+    });
 var mongojs = require('mongojs');
 mongoose.connect('mongodb://159.203.17.174/meteor');
 var db = mongoose.connection;
@@ -66,6 +74,45 @@ app.post('/filter', function(req,res){
 	})
 	//console.log(options);
 	//res.send(options);
+});
+// email service to send to realtor
+app.post('/emailmsg', function(req,res){
+	var emails = [];
+	var mailOptions = req.body;
+	/*var test = db.collection('users').find({_id: 'B6foJjtp3orNyCXjL'},{emails:1, _id:0});
+	console.log(test);*/
+	//fetch reltor ID form request and use that to get the email of realtor... sending message is dependent of fetching info from database
+	db.collection('users').find({_id: mailOptions.realtorId},{emails:1, _id:0}).toArray(function(err,msg){
+		if(err)
+		{
+			console.log(err);
+		}
+		//res.send(msg);
+		//console.log(msg[0].emails[0].address);
+		mailOptions.to = msg[0].emails[0].address;
+		console.log(mailOptions.to);
+	
+	// create a transporter
+	/**
+	var text = 'Hello world from \n\n' + req.body.name;
+	var mailOptions = {
+    from: 'est8app@gmail.com', // sender address
+    to: 'toni.ademilua@gmail.com', // list of receivers
+    subject: 'Email Example', // Subject line
+    text: text //, // plaintext body
+    // html: '<b>Hello world ✔</b>' // You can choose to send an HTML body instead
+	};**/
+	transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+        console.log(error);
+        res.json({yo: 'error'});
+    }else{
+        console.log('Message sent: ' + info.response);
+        res.json({yo: info.response});
+    };
+});
+});
+
 });
 
 // test for openshift compatibility
