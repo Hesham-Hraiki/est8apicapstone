@@ -26,7 +26,7 @@ app.get('/', function(req,res){
 });
 app.get('/api', function(req,res){
 	console.log("I received a request");
-	db.collection('listings').find().toArray(function(err,docs){
+	db.collection('listings').find({price:{$exists: true},pictures:{$exists: true}}).toArray(function(err,docs){
 		if(err)
 		{
 			res.send(err);
@@ -62,7 +62,8 @@ app.post('/filter', function(req,res){
 		bedrooms: bedroom,
 		bathrooms: bathroom,
 		category: category,
-		price: {$gte: minPrice,$lte: maxPrice}
+		pictures: {$exists: true},
+		price: {$exists:true, $gte: minPrice,$lte: maxPrice}
 		
 	}).toArray(function(err,docs){
 		if(err){
