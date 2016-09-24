@@ -76,6 +76,26 @@ app.post('/filter', function(req,res){
 	//console.log(options);
 	//res.send(options);
 });
+// new filter route for new simple location and price based search 
+app.post('/simplefilter', function(req,res){
+	console.log(req.body);
+	var location = req.body.location;
+	var minPrice = parseInt(req.body.minPrice);
+	var maxPrice = parseInt(req.body.maxPrice);
+	db.collection('listings').find({
+		$or:[{city:location},{province:location},{postal:location}],
+		price: {$exists:true, $gte: minPrice,$lte: maxPrice} 
+		
+	}).toArray(function(err,docs){
+		if(err){
+			console.log(err);
+			res.send(err);
+		}
+		console.log(docs);
+		res.json(docs);
+	})
+});
+
 // email service to send to realtor
 app.post('/emailmsg', function(req,res){
 	var emails = [];
