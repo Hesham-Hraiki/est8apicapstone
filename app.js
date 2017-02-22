@@ -5,25 +5,30 @@ var nodemailer = require('nodemailer');
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
 //app.use(express.bodyParser());
 var transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
             user: 'est8app@gmail.com', // Your email id
-            pass: 'mobileest8app' // Your password
+            //pass: 'mobileest8app' // Your password
+            pass: 'capstoneproject3' // Your password
         }
     });
+
 var mongojs = require('mongojs');
 mongoose.connect('mongodb://159.203.17.174/meteor');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   // we're connected!
-	console.log("WE ARE connected!!!!!!!!!");
+	console.log("We are connected!!!!!!!!!");
 });
+
 app.get('/', function(req,res){
 	res.send("Hello from the Other Side");
 });
+
 app.get('/api', function(req,res){
 	console.log("I received a request");
 	db.collection('listings').find({pictures:{$exists: true}}).toArray(function(err,docs){
@@ -48,6 +53,7 @@ app.get('/api/?:profileID',function(req,res){
 		res.json(docs);
 	});
 });
+
 //filter options
 app.post('/filter', function(req,res){
 	console.log(req.body);
@@ -63,8 +69,8 @@ app.post('/filter', function(req,res){
 		bathrooms: {$gte: bathroom},
 		category: category,
 		pictures: {$exists: true},
-		price: {$exists:true, $gte: minPrice,$lte: maxPrice} 
-		
+		price: {$exists:true, $gte: minPrice,$lte: maxPrice}
+
 	}).toArray(function(err,docs){
 		if(err){
 			console.log(err);
@@ -76,7 +82,8 @@ app.post('/filter', function(req,res){
 	//console.log(options);
 	//res.send(options);
 });
-// new filter route for new simple location and price based search 
+
+// new filter route for new simple location and price based search
 app.post('/simplefilter', function(req,res){
 	console.log(req.body);
 	var location = req.body.location;
@@ -84,8 +91,8 @@ app.post('/simplefilter', function(req,res){
 	var maxPrice = parseInt(req.body.maxPrice);
 	db.collection('listings').find({
 		$or:[{city:location},{province:location},{postal:location}],
-		price: {$exists:true, $gte: minPrice,$lte: maxPrice} 
-		
+		price: {$exists:true, $gte: minPrice,$lte: maxPrice}
+
 	}).toArray(function(err,docs){
 		if(err){
 			console.log(err);
@@ -112,7 +119,7 @@ app.post('/emailmsg', function(req,res){
 		//console.log(msg[0].emails[0].address);
 		mailOptions.to = msg[0].emails[0].address;
 		console.log(mailOptions.to);
-	
+
 	// create a transporter
 	/**
 	var text = 'Hello world from \n\n' + req.body.name;
@@ -133,7 +140,6 @@ app.post('/emailmsg', function(req,res){
     };
 });
 });
-
 });
 
 // test for openshift compatibility
@@ -142,7 +148,6 @@ var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 
 app.listen(server_port, server_ip_address, function () {
   console.log( "Listening on " + server_ip_address + ", server_port " + server_port )
-}); 
+});
 
 //app.listen('3000');
-
